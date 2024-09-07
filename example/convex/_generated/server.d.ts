@@ -151,38 +151,28 @@ export type DatabaseReader = GenericDatabaseReader<DataModel>;
 export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
 
 export declare const components: {
-  theComponent: {
+  crons: {
     index: {
-      checkRateLimit: FunctionReference<
-        "query",
-        "internal",
-        {
-          count?: number;
-          key?: string;
-          name: string;
-          name2: string;
-          reserve?: boolean;
-          throws?: boolean;
-        },
-        { ok: boolean; retryAt?: number; ts?: number; value?: number }
-      >;
-      rateLimit: FunctionReference<
+      del: FunctionReference<"mutation", "internal", { id: string }, any>;
+      delByName: FunctionReference<
         "mutation",
         "internal",
-        {
-          count?: number;
-          key?: string;
-          name: string;
-          name2: string;
-          reserve?: boolean;
-          throws?: boolean;
-        },
-        { ok: boolean; retryAt?: number }
+        { name: string },
+        any
       >;
-      resetRateLimit: FunctionReference<
+      get: FunctionReference<"query", "internal", { id: string }, any>;
+      getByName: FunctionReference<"query", "internal", { name: string }, any>;
+      list: FunctionReference<"query", "internal", {}, any>;
+      registerCron: FunctionReference<
         "mutation",
         "internal",
-        { key?: string; name: string },
+        { args: any; cronspec: string; functionHandle: string; name?: string },
+        any
+      >;
+      registerInterval: FunctionReference<
+        "mutation",
+        "internal",
+        { args: any; functionHandle: string; ms: number; name?: string },
         any
       >;
     };

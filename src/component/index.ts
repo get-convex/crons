@@ -19,16 +19,16 @@
 
 import { FunctionHandle } from "convex/server";
 import { v, Value } from "convex/values";
-import { parseArgs } from "./parseArgs";
+import { parseArgs } from "./parseArgs.js";
 import {
   MutationCtx,
   mutation,
   query,
   internalMutation,
 } from "./_generated/server.js";
-import { internal } from "./_generated/api";
+import { internal } from "./_generated/api.js";
+import { Doc } from "./_generated/dataModel.js";
 import parser from "cron-parser";
-import { Doc } from "./_generated/dataModel";
 
 /**
  * Schedule a mutation or action to run on a recurring basis.
@@ -106,6 +106,7 @@ export const registerInterval = mutation({
  * @returns List of `cron` table rows.
  */
 export const list = query({
+  args: {},
   handler: async (ctx) => {
     return await ctx.db.query("crons").collect();
   },
@@ -246,7 +247,7 @@ async function scheduleCron(
     );
     const schedulerJobId = await ctx.scheduler.runAfter(
       schedule.ms,
-      internal.lib.rescheduler,
+      internal.index.rescheduler,
       { id }
     );
     await ctx.db.patch(id, { schedulerJobId });
@@ -264,7 +265,7 @@ async function scheduleCron(
   );
   const schedulerJobId = await ctx.scheduler.runAt(
     nextScheduledDate(new Date(), schedule.cronspec),
-    internal.lib.rescheduler,
+    internal.index.rescheduler,
     { id }
   );
   await ctx.db.patch(id, { schedulerJobId });
@@ -338,7 +339,7 @@ export const rescheduler = internalMutation({
       const nextTime = schedulerJob.scheduledTime + cronJob.schedule.ms;
       const nextSchedulerJobId = await ctx.scheduler.runAt(
         nextTime,
-        internal.lib.rescheduler,
+        internal.index.rescheduler,
         { id }
       );
       await ctx.db.patch(id, { schedulerJobId: nextSchedulerJobId });
@@ -349,7 +350,7 @@ export const rescheduler = internalMutation({
       );
       const nextSchedulerJobId = await ctx.scheduler.runAt(
         nextTime,
-        internal.lib.rescheduler,
+        internal.index.rescheduler,
         { id }
       );
       await ctx.db.patch(id, { schedulerJobId: nextSchedulerJobId });

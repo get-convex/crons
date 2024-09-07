@@ -7,9 +7,7 @@
     "build:esm": "tsc --project ./esm.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
     "build:cjs": "tsc --project ./commonjs.json && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/esm/package.json",
     "typecheck": "tsc --noEmit",
-    "prepare": "npm run build",
-    "prepack": "node node10stubs.mjs",
-    "postpack": "node node10stubs.mjs --cleanup"
+    "prepare": "npm run build"
   },
   "files": [
     "dist",
@@ -28,16 +26,6 @@
         "default": "./dist/commonjs/client.js"
       }
     },
-    "./frontend": {
-      "import": {
-        "types": "./dist/esm/frontend.d.ts",
-        "default": "./dist/esm/frontend.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/frontend.d.ts",
-        "default": "./dist/commonjs/frontend.js"
-      }
-    },
     "./convex.config.js": {
       "import": {
         "types": "./dist/esm/component/convex.config.d.ts",
@@ -50,7 +38,8 @@
     }
   },
   "dependencies": {
-    "convex": "1.15.1-alpha.2"
+    "convex": "1.15.1-alpha.2",
+    "cron-parser": "^4.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

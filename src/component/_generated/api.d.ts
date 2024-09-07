@@ -11,6 +11,7 @@
  */
 
 import type * as index from "../index.js";
+import type * as parseArgs from "../parseArgs.js";
 
 import type {
   ApiFromModules,
@@ -27,39 +28,25 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   index: typeof index;
+  parseArgs: typeof parseArgs;
 }>;
 declare const fullApiWithMounts: typeof fullApi & {
   index: {
-    checkRateLimit: FunctionReference<
-      "query",
-      "public",
-      {
-        count?: number;
-        key?: string;
-        name: string;
-        name2: string;
-        reserve?: boolean;
-        throws?: boolean;
-      },
-      { ok: boolean; retryAt?: number; ts?: number; value?: number }
-    >;
-    rateLimit: FunctionReference<
+    del: FunctionReference<"mutation", "public", { id: string }, any>;
+    delByName: FunctionReference<"mutation", "public", { name: string }, any>;
+    get: FunctionReference<"query", "public", { id: string }, any>;
+    getByName: FunctionReference<"query", "public", { name: string }, any>;
+    list: FunctionReference<"query", "public", {}, any>;
+    registerCron: FunctionReference<
       "mutation",
       "public",
-      {
-        count?: number;
-        key?: string;
-        name: string;
-        name2: string;
-        reserve?: boolean;
-        throws?: boolean;
-      },
-      { ok: boolean; retryAt?: number }
+      { args: any; cronspec: string; functionHandle: string; name?: string },
+      any
     >;
-    resetRateLimit: FunctionReference<
+    registerInterval: FunctionReference<
       "mutation",
       "public",
-      { key?: string; name: string },
+      { args: any; functionHandle: string; ms: number; name?: string },
       any
     >;
   };
