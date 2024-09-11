@@ -152,7 +152,7 @@ export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
 
 export declare const components: {
   crons: {
-    index: {
+    public: {
       del: FunctionReference<"mutation", "internal", { id: string }, any>;
       delByName: FunctionReference<
         "mutation",

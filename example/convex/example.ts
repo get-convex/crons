@@ -1,8 +1,9 @@
 import { v } from "convex/values";
-import { internalMutation } from "./_generated/server";
-import { components } from "./_generated/server";
+import { internalMutation, components } from "./_generated/server.js";
 import { internal } from "./_generated/api";
-import { createFunctionHandle } from "convex/server";
+import { defineCrons } from "../../src/client";
+
+const crons = defineCrons(components.crons);
 
 export const logStuff = internalMutation({
   args: {
@@ -15,16 +16,17 @@ export const logStuff = internalMutation({
 
 export const registerDailyCron = internalMutation({
   handler: async (ctx) => {
-    const existingCron = await ctx.runQuery(components.crons.index.getByName, {
-      name: "daily",
-    });
+    const existingCron = await crons.get(ctx, { name: "daily" });
     if (existingCron === null) {
-      await ctx.runMutation(components.crons.index.registerCron, {
-        name: "daily",
-        cronspec: "0 0 * * *",
-        functionHandle: await createFunctionHandle(internal.example.logStuff),
-        args: { message: "daily cron" },
-      });
+      await crons.registerCron(
+        ctx,
+        "0 0 * * *",
+        internal.example.logStuff,
+        {
+          message: "daily cron",
+        },
+        "daily"
+      );
     }
   },
 });

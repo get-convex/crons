@@ -10,8 +10,8 @@
  * @module
  */
 
-import type * as index from "../index.js";
 import type * as parseArgs from "../parseArgs.js";
+import type * as public from "../public.js";
 
 import type {
   ApiFromModules,
@@ -27,11 +27,11 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  index: typeof index;
   parseArgs: typeof parseArgs;
+  public: typeof public;
 }>;
-declare const fullApiWithMounts: typeof fullApi & {
-  index: {
+export type Mounts = {
+  public: {
     del: FunctionReference<"mutation", "public", { id: string }, any>;
     delByName: FunctionReference<"mutation", "public", { name: string }, any>;
     get: FunctionReference<"query", "public", { id: string }, any>;
@@ -51,6 +51,10 @@ declare const fullApiWithMounts: typeof fullApi & {
     >;
   };
 };
+// For now fullApiWithMounts is only fullApi which provides
+// jump-to-definition in component client code.
+// Use Mounts for the same type without the inference.
+declare const fullApiWithMounts: typeof fullApi;
 
 export declare const api: FilterApi<
   typeof fullApiWithMounts,

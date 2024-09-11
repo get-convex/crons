@@ -247,7 +247,7 @@ async function scheduleCron(
     );
     const schedulerJobId = await ctx.scheduler.runAfter(
       schedule.ms,
-      internal.index.rescheduler,
+      internal.public.rescheduler,
       { id }
     );
     await ctx.db.patch(id, { schedulerJobId });
@@ -265,7 +265,7 @@ async function scheduleCron(
   );
   const schedulerJobId = await ctx.scheduler.runAt(
     nextScheduledDate(new Date(), schedule.cronspec),
-    internal.index.rescheduler,
+    internal.public.rescheduler,
     { id }
   );
   await ctx.db.patch(id, { schedulerJobId });
@@ -339,7 +339,7 @@ export const rescheduler = internalMutation({
       const nextTime = schedulerJob.scheduledTime + cronJob.schedule.ms;
       const nextSchedulerJobId = await ctx.scheduler.runAt(
         nextTime,
-        internal.index.rescheduler,
+        internal.public.rescheduler,
         { id }
       );
       await ctx.db.patch(id, { schedulerJobId: nextSchedulerJobId });
@@ -350,7 +350,7 @@ export const rescheduler = internalMutation({
       );
       const nextSchedulerJobId = await ctx.scheduler.runAt(
         nextTime,
-        internal.index.rescheduler,
+        internal.public.rescheduler,
         { id }
       );
       await ctx.db.patch(id, { schedulerJobId: nextSchedulerJobId });

@@ -6,6 +6,7 @@ export default defineSchema({
   crons: defineTable({
     name: v.optional(v.string()), // optional name
     functionHandle: v.string(), // function to run
+    // TODO: change to Record<string, Value>
     args: v.any(), // args as an object
     schedule: v.union(
       v.object({
