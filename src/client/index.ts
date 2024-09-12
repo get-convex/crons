@@ -1,28 +1,26 @@
 import {
   createFunctionHandle,
   Expand,
+  FunctionArgs,
   FunctionReference,
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
+  SchedulableFunctionReference,
 } from "convex/server";
 import { GenericId } from "convex/values";
 
+// Implementation of crons in user space.
+//
+// The API returned by this function provides a thin wrapper around the
+// crons component's public API.
 export function defineCrons(component: UseApi<typeof api>) {
   return {
-    register: async <
-      F extends FunctionReference<"mutation" | "action", "public" | "internal">,
-    >(
+    register: async <F extends SchedulableFunctionReference>(
       ctx: RunMutationCtx,
       schedule: Schedule,
       func: F,
-      args: F extends FunctionReference<
-        "mutation" | "action",
-        "public" | "internal",
-        infer Args
-      >
-        ? Args
-        : never,
+      args: FunctionArgs<F>,
       name?: string
     ) =>
       ctx.runMutation(component.public.register, {
