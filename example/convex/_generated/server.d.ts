@@ -153,26 +153,30 @@ export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
 export declare const components: {
   crons: {
     public: {
-      del: FunctionReference<"mutation", "internal", { id: string }, any>;
-      delByName: FunctionReference<
+      del: FunctionReference<
         "mutation",
         "internal",
-        { name: string },
+        { identifier: { id: string } | { name: string } },
         any
       >;
-      get: FunctionReference<"query", "internal", { id: string }, any>;
-      getByName: FunctionReference<"query", "internal", { name: string }, any>;
+      get: FunctionReference<
+        "query",
+        "internal",
+        { identifier: { id: string } | { name: string } },
+        any
+      >;
       list: FunctionReference<"query", "internal", {}, any>;
-      registerCron: FunctionReference<
+      register: FunctionReference<
         "mutation",
         "internal",
-        { args: any; cronspec: string; functionHandle: string; name?: string },
-        any
-      >;
-      registerInterval: FunctionReference<
-        "mutation",
-        "internal",
-        { args: any; functionHandle: string; ms: number; name?: string },
+        {
+          args: any;
+          functionHandle: string;
+          name?: string;
+          schedule:
+            | { cronspec: string; kind: "cron" }
+            | { kind: "interval"; ms: number };
+        },
         any
       >;
     };

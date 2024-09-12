@@ -10,7 +10,6 @@
  * @module
  */
 
-import type * as parseArgs from "../parseArgs.js";
 import type * as public from "../public.js";
 
 import type {
@@ -27,26 +26,34 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  parseArgs: typeof parseArgs;
   public: typeof public;
 }>;
 export type Mounts = {
   public: {
-    del: FunctionReference<"mutation", "public", { id: string }, any>;
-    delByName: FunctionReference<"mutation", "public", { name: string }, any>;
-    get: FunctionReference<"query", "public", { id: string }, any>;
-    getByName: FunctionReference<"query", "public", { name: string }, any>;
-    list: FunctionReference<"query", "public", {}, any>;
-    registerCron: FunctionReference<
+    del: FunctionReference<
       "mutation",
       "public",
-      { args: any; cronspec: string; functionHandle: string; name?: string },
+      { identifier: { id: string } | { name: string } },
       any
     >;
-    registerInterval: FunctionReference<
+    get: FunctionReference<
+      "query",
+      "public",
+      { identifier: { id: string } | { name: string } },
+      any
+    >;
+    list: FunctionReference<"query", "public", {}, any>;
+    register: FunctionReference<
       "mutation",
       "public",
-      { args: any; functionHandle: string; ms: number; name?: string },
+      {
+        args: any;
+        functionHandle: string;
+        name?: string;
+        schedule:
+          | { cronspec: string; kind: "cron" }
+          | { kind: "interval"; ms: number };
+      },
       any
     >;
   };

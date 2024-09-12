@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "convex": "1.15.1-alpha.2",
+    "convex": "1.16.0-alpha.2",
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {

@@ -4,10 +4,9 @@ import { v } from "convex/values";
 export default defineSchema({
   // User space crons.
   crons: defineTable({
-    name: v.optional(v.string()), // optional name
-    functionHandle: v.string(), // function to run
-    // TODO: change to Record<string, Value>
-    args: v.any(), // args as an object
+    name: v.optional(v.string()), // optional
+    functionHandle: v.string(),
+    args: v.record(v.string(), v.any()),
     schedule: v.union(
       v.object({
         kind: v.literal("interval"),

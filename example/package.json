@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "cron-parser": "^4.9.0",
-    "convex": "^1.16.0-alpha.1"
+    "convex": "1.16.0-alpha.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

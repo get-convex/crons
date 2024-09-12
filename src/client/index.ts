@@ -10,74 +10,39 @@ import { GenericId } from "convex/values";
 
 export function defineCrons(component: UseApi<typeof api>) {
   return {
-    registerCron: async <
-      F extends FunctionReference<"mutation" | "action", "internal">,
+    register: async <
+      F extends FunctionReference<"mutation" | "action", "public" | "internal">,
     >(
       ctx: RunMutationCtx,
-      cronspec: string,
+      schedule: Schedule,
       func: F,
       args: F extends FunctionReference<
         "mutation" | "action",
-        "internal",
+        "public" | "internal",
         infer Args
       >
         ? Args
         : never,
       name?: string
     ) =>
-      ctx.runMutation(component.public.registerCron, {
+      ctx.runMutation(component.public.register, {
         name,
-        cronspec,
-        functionHandle: await createFunctionHandle(func),
-        args,
-      }),
-    registerInterval: async <
-      F extends FunctionReference<"mutation" | "action", "internal">,
-    >(
-      ctx: RunMutationCtx,
-      ms: number,
-      func: F,
-      args: F extends FunctionReference<
-        "mutation" | "action",
-        "internal",
-        infer Args
-      >
-        ? Args
-        : never,
-      name?: string
-    ) =>
-      ctx.runMutation(component.public.registerInterval, {
-        name,
-        ms,
+        schedule,
         functionHandle: await createFunctionHandle(func),
         args,
       }),
     list: async (ctx: RunQueryCtx) => ctx.runQuery(component.public.list, {}),
     get: async (
       ctx: RunQueryCtx,
-      // TODO type safety for id
       identifier: { id: string } | { name: string }
     ) => {
-      if ("id" in identifier) {
-        return ctx.runQuery(component.public.get, { id: identifier.id });
-      } else {
-        return ctx.runQuery(component.public.getByName, {
-          name: identifier.name,
-        });
-      }
+      return ctx.runQuery(component.public.get, { identifier });
     },
     del: async (
       ctx: RunMutationCtx,
-      // TODO type safety for id
       identifier: { id: string } | { name: string }
     ) => {
-      if ("id" in identifier) {
-        return ctx.runMutation(component.public.del, { id: identifier.id });
-      } else {
-        return ctx.runMutation(component.public.delByName, {
-          name: identifier.name,
-        });
-      }
+      return ctx.runMutation(component.public.del, { identifier });
     },
   };
 }
@@ -93,6 +58,7 @@ type RunMutationCtx = {
 
 // TODO: Copy in a concrete API from example/_generated/server.d.ts once your API is stable.
 import { api } from "../component/_generated/api.js"; // the component's public api
+import { Schedule } from "../component/public.js";
 
 export type OpaqueIds<T> =
   T extends GenericId<infer _T>

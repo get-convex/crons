@@ -16,11 +16,10 @@ export const logStuff = internalMutation({
 
 export const registerDailyCron = internalMutation({
   handler: async (ctx) => {
-    const existingCron = await crons.get(ctx, { name: "daily" });
-    if (existingCron === null) {
-      await crons.registerCron(
+    if ((await crons.get(ctx, { name: "daily" })) === null) {
+      await crons.register(
         ctx,
-        "0 0 * * *",
+        { kind: "cron", cronspec: "0 0 * * *" },
         internal.example.logStuff,
         {
           message: "daily cron",
