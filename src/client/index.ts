@@ -9,7 +9,7 @@ import {
   GenericQueryCtx,
   SchedulableFunctionReference,
 } from "convex/server";
-import { api } from "../component/_generated/api.js"; // the component's public api
+import { api } from "../component/_generated/api.js";
 import { CronInfo, Schedule } from "../component/public.js";
 import { GenericId } from "convex/values";
 
@@ -35,6 +35,8 @@ import { GenericId } from "convex/values";
 // cron with a given name. e.g., in an `init.ts` file that gets run on every
 // deploy via `convex dev --run init`:
 //
+// const crons = new CronsClient(components.crons);
+// ...
 // if ((await crons.get(ctx, { name: "daily" })) === null) {
 //   await crons.register(
 //     ctx,
@@ -44,81 +46,84 @@ import { GenericId } from "convex/values";
 //     "daily"
 //   );
 // }
-export function defineCrons(component: UseApi<typeof api>) {
-  return {
-    /**
-     * Schedule a mutation or action to run on a cron schedule or interval.
-     *
-     * @param ctx - The mutation context from the calling Convex mutation.
-     * @param schedule - Either a cron specification string or an interval in
-     *        milliseconds. For intervals, ms must be >= 1000.
-     * @param func - A function reference to the mutation or action to schedule.
-     * @param args - The arguments to the function.
-     * @param name - Optional unique name for the cron. Will throw if a name is
-     *        provided and a cron with the same name already exists.
-     * @returns A string identifier for the cron job.
-     */
-    register: async <F extends SchedulableFunctionReference>(
-      ctx: RunMutationCtx,
-      schedule: Schedule,
-      func: F,
-      args: FunctionArgs<F>,
-      name?: string
-    ): Promise<string> =>
-      ctx.runMutation(component.public.register, {
-        name,
-        schedule,
-        functionHandle: await createFunctionHandle(func),
-        args,
-      }),
+export class CronsClient {
+  constructor(private component: UseApi<typeof api>) {}
 
-    /**
-     * List all user space cron jobs.
-     *
-     * @returns List of `cron` table rows.
-     */
-    list: async (ctx: RunQueryCtx): Promise<CronInfo[]> => {
-      const crons = await ctx.runQuery(component.public.list, {});
-      return crons.map((cron) => ({
-        ...cron,
-        functionHandle: cron.functionHandle as FunctionHandle<
-          "mutation" | "action"
-        >,
-      }));
-    },
+  /**
+   * Schedule a mutation or action to run on a cron schedule or interval.
+   *
+   * @param ctx - The mutation context from the calling Convex mutation.
+   * @param schedule - Either a cron specification string or an interval in
+   *        milliseconds. For intervals, ms must be >= 1000.
+   * @param func - A function reference to the mutation or action to schedule.
+   * @param args - The arguments to the function.
+   * @param name - Optional unique name for the cron. Will throw if a name is
+   *        provided and a cron with the same name already exists.
+   * @returns A string identifier for the cron job.
+   */
+  async register<F extends SchedulableFunctionReference>(
+    ctx: RunMutationCtx,
+    schedule: Schedule,
+    func: F,
+    args: FunctionArgs<F>,
+    name?: string
+  ): Promise<string> {
+    return ctx.runMutation(this.component.public.register, {
+      name,
+      schedule,
+      functionHandle: await createFunctionHandle(func),
+      args,
+    });
+  }
 
-    /**
-     * Get an existing cron job by id or name.
-     *
-     * @param identifier - Either the ID or name of the cron job.
-     * @returns Cron job document.
-     */
-    get: async (
-      ctx: RunQueryCtx,
-      identifier: { id: string } | { name: string }
-    ): Promise<CronInfo | null> => {
-      const cron = await ctx.runQuery(component.public.get, { identifier });
-      if (cron === null) {
-        return null;
-      }
-      return {
-        ...cron,
-        functionHandle: cron.functionHandle as FunctionHandle<
-          "mutation" | "action"
-        >,
-      };
-    },
+  /**
+   * List all user space cron jobs.
+   *
+   * @returns List of `cron` table rows.
+   */
+  async list(ctx: RunQueryCtx): Promise<CronInfo[]> {
+    const crons = await ctx.runQuery(this.component.public.list, {});
+    return crons.map((cron) => ({
+      ...cron,
+      functionHandle: cron.functionHandle as FunctionHandle<
+        "mutation" | "action"
+      >,
+    }));
+  }
 
-    /**
-     * Delete and deschedule a cron job by id or name.
-     *
-     * @param identifier - Either the ID or name of the cron job.
-     */
-    del: async (
-      ctx: RunMutationCtx,
-      identifier: { id: string } | { name: string }
-    ): Promise<null> => ctx.runMutation(component.public.del, { identifier }), // XXX does it make sense to return null vs void?
-  };
+  /**
+   * Get an existing cron job by id or name.
+   *
+   * @param identifier - Either the ID or name of the cron job.
+   * @returns Cron job document.
+   */
+  async get(
+    ctx: RunQueryCtx,
+    identifier: { id: string } | { name: string }
+  ): Promise<CronInfo | null> {
+    const cron = await ctx.runQuery(this.component.public.get, { identifier });
+    if (cron === null) {
+      return null;
+    }
+    return {
+      ...cron,
+      functionHandle: cron.functionHandle as FunctionHandle<
+        "mutation" | "action"
+      >,
+    };
+  }
+
+  /**
+   * Delete and deschedule a cron job by id or name.
+   *
+   * @param identifier - Either the ID or name of the cron job.
+   */
+  async del(
+    ctx: RunMutationCtx,
+    identifier: { id: string } | { name: string }
+  ): Promise<null> {
+    return ctx.runMutation(this.component.public.del, { identifier });
+  }
 }
 
 /* Type utils follow */

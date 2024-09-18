@@ -157,7 +157,7 @@ export declare const components: {
         "mutation",
         "internal",
         { identifier: { id: string } | { name: string } },
-        {}
+        null
       >;
       get: FunctionReference<
         "query",

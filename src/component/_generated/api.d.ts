@@ -34,7 +34,7 @@ export type Mounts = {
       "mutation",
       "public",
       { identifier: { id: string } | { name: string } },
-      {}
+      null
     >;
     get: FunctionReference<
       "query",

@@ -1,9 +1,9 @@
 import { v } from "convex/values";
 import { internalMutation, components } from "./_generated/server.js";
 import { internal } from "./_generated/api";
-import { defineCrons } from "../../src/client";
+import { CronsClient } from "../../src/client";
 
-const crons = defineCrons(components.crons);
+const crons = new CronsClient(components.crons);
 
 export const logStuff = internalMutation({
   args: {

@@ -23,7 +23,7 @@ const scheduleValidator = schema.tables.crons.validator.fields.schedule;
 // XXX should i use the built-in cron type?
 export type CronInfo = {
   id: string; // XXX ideally this would be Id<"crons">
-  name: string | undefined;
+  name?: string;
   functionHandle: FunctionHandle<"mutation" | "action">;
   args: Record<string, unknown>;
   schedule: Schedule;
@@ -134,7 +134,7 @@ export const list = query({
     const crons = await ctx.db.query("crons").collect();
     return crons.map((cron) => ({
       id: cron._id,
-      name: cron.name,
+      ...(cron.name !== undefined && { name: cron.name }), // XXX this is gross
       functionHandle: cron.functionHandle,
       args: cron.args,
       schedule: cron.schedule,
@@ -167,7 +167,7 @@ export const get = query({
     if (!cron) return null;
     return {
       id: cron._id,
-      name: cron.name,
+      ...(cron.name !== undefined && { name: cron.name }), // XXX this is gross
       functionHandle: cron.functionHandle,
       args: cron.args,
       schedule: cron.schedule,
@@ -187,7 +187,7 @@ export const del = mutation({
       v.object({ name: v.string() })
     ),
   },
-  returns: {},
+  returns: v.null(),
   handler: async (ctx, { identifier }) => {
     let cron: Doc<"crons"> | null;
     if ("id" in identifier) {
