@@ -1,32 +1,6 @@
 // Implementation of crons in user space.
 //
-// Supports intervals in ms as well as cron schedules with the same format as
-// the unix command `cron`:
-//  *  *  *  *  *  *
-//  ┬  ┬  ┬  ┬  ┬  ┬
-//  │  │  │  │  │  |
-//  │  │  │  │  │  └── day of week (0 - 7, 1L - 7L) (0 or 7 is Sun)
-//  │  │  │  │  └───── month (1 - 12)
-//  │  │  │  └──────── day of month (1 - 31, L)
-//  │  │  └─────────── hour (0 - 23)
-//  │  └────────────── minute (0 - 59)
-//  └───────────────── second (0 - 59, optional)
-//
-// Crons can be registered at runtime via the `register` mutation. If you'd like
-// to statically define cronjobs like in the built-in `crons.ts` Convex feature
-// you can do so via an init script that idempotently registers a cron with a
-// given name. e.g., in an `init.ts` file that gets run on every deploy via
-// `convex dev --run init`:
-//
-// if ((await crons.get(ctx, { name: "daily" })) === null) {
-//   await crons.register(
-//     ctx,
-//     { kind: "cron", cronspec: "0 0 * * *" },
-//     internal.example.logStuff,
-//     { message: "daily cron" },
-//     "daily"
-//   );
-// }
+// See ../client/index.ts for the public API.
 
 import { FunctionHandle } from "convex/server";
 import { v } from "convex/values";
@@ -239,9 +213,6 @@ export const rescheduler = internalMutation({
     if (!schedulerJob) {
       throw Error(`Scheduler job ${cronJob.schedulerJobId} not found`);
     }
-    // XXX The convex-test library runs mutations through the `inProgress` state
-    // but the production state machine does not. Remove the `inProgress` allowance
-    // once the test library has been updated.
     if (
       schedulerJob.state.kind !== "pending" &&
       schedulerJob.state.kind !== "inProgress"
