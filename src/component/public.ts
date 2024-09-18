@@ -13,10 +13,28 @@ import {
 import { internal } from "./_generated/api.js";
 import { Doc, Id } from "./_generated/dataModel.js";
 import parser from "cron-parser";
+import schema from "./schema.js";
 
 export type Schedule =
   | { kind: "cron"; cronspec: string }
   | { kind: "interval"; ms: number };
+const scheduleValidator = schema.tables.crons.validator.fields.schedule;
+
+// XXX should i use the built-in cron type?
+export type CronInfo = {
+  id: string; // XXX ideally this would be Id<"crons">
+  name: string | undefined;
+  functionHandle: FunctionHandle<"mutation" | "action">;
+  args: Record<string, unknown>;
+  schedule: Schedule;
+};
+const cronInfoValidator = v.object({
+  id: v.id("crons"),
+  name: v.optional(v.string()),
+  functionHandle: v.string(),
+  args: v.any(), // XXX change to args: v.record(v.string(), v.any()),
+  schedule: scheduleValidator,
+});
 
 /**
  * Schedule a mutation or action to run on a cron schedule or interval.
@@ -33,14 +51,11 @@ export type Schedule =
 export const register = mutation({
   args: {
     name: v.optional(v.string()),
-    schedule: v.union(
-      v.object({ kind: v.literal("cron"), cronspec: v.string() }),
-      v.object({ kind: v.literal("interval"), ms: v.number() })
-    ),
+    schedule: scheduleValidator,
     functionHandle: v.string(),
-    // TODO change to args: v.record(v.string(), v.any()),
-    args: v.any(),
+    args: v.any(), // XXX change to args: v.record(v.string(), v.any()),
   },
+  returns: v.id("crons"),
   handler: async (ctx, { name, schedule, functionHandle, args }) => {
     if (
       name &&
@@ -114,8 +129,16 @@ function calculateNextRun(lastScheduled: Date, schedule: Schedule): Date {
  */
 export const list = query({
   args: {},
+  returns: v.array(cronInfoValidator),
   handler: async (ctx) => {
-    return await ctx.db.query("crons").collect();
+    const crons = await ctx.db.query("crons").collect();
+    return crons.map((cron) => ({
+      id: cron._id,
+      name: cron.name,
+      functionHandle: cron.functionHandle,
+      args: cron.args,
+      schedule: cron.schedule,
+    }));
   },
 });
 
@@ -123,7 +146,7 @@ export const list = query({
  * Get an existing cron job by id or name.
  *
  * @param identifier - Either the ID or name of the cron job.
- * @returns Cron job document.
+ * @returns Cron job document or null if not found.
  */
 export const get = query({
   args: {
@@ -132,15 +155,23 @@ export const get = query({
       v.object({ name: v.string() })
     ),
   },
+  returns: v.union(cronInfoValidator, v.null()),
   handler: async (ctx, { identifier }) => {
-    if ("id" in identifier) {
-      return await ctx.db.get(identifier.id);
-    } else {
-      return await ctx.db
-        .query("crons")
-        .withIndex("name", (q) => q.eq("name", identifier.name))
-        .unique();
-    }
+    const cron =
+      "id" in identifier
+        ? await ctx.db.get(identifier.id)
+        : await ctx.db
+            .query("crons")
+            .withIndex("name", (q) => q.eq("name", identifier.name))
+            .unique();
+    if (!cron) return null;
+    return {
+      id: cron._id,
+      name: cron.name,
+      functionHandle: cron.functionHandle,
+      args: cron.args,
+      schedule: cron.schedule,
+    };
   },
 });
 
@@ -156,6 +187,7 @@ export const del = mutation({
       v.object({ name: v.string() })
     ),
   },
+  returns: {},
   handler: async (ctx, { identifier }) => {
     let cron: Doc<"crons"> | null;
     if ("id" in identifier) {
@@ -197,6 +229,7 @@ export const rescheduler = internalMutation({
   args: {
     id: v.id("crons"),
   },
+  returns: {},
   handler: async (ctx, { id }) => {
     // Cron job is the logical concept we're rescheduling repeatedly.
     const cronJob = await ctx.db.get(id);

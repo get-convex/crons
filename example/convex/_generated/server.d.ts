@@ -157,15 +157,36 @@ export declare const components: {
         "mutation",
         "internal",
         { identifier: { id: string } | { name: string } },
-        any
+        {}
       >;
       get: FunctionReference<
         "query",
         "internal",
         { identifier: { id: string } | { name: string } },
-        any
+        {
+          args: any;
+          functionHandle: string;
+          id: string;
+          name?: string;
+          schedule:
+            | { kind: "interval"; ms: number }
+            | { cronspec: string; kind: "cron" };
+        } | null
       >;
-      list: FunctionReference<"query", "internal", {}, any>;
+      list: FunctionReference<
+        "query",
+        "internal",
+        {},
+        Array<{
+          args: any;
+          functionHandle: string;
+          id: string;
+          name?: string;
+          schedule:
+            | { kind: "interval"; ms: number }
+            | { cronspec: string; kind: "cron" };
+        }>
+      >;
       register: FunctionReference<
         "mutation",
         "internal",
@@ -174,10 +195,10 @@ export declare const components: {
           functionHandle: string;
           name?: string;
           schedule:
-            | { cronspec: string; kind: "cron" }
-            | { kind: "interval"; ms: number };
+            | { kind: "interval"; ms: number }
+            | { cronspec: string; kind: "cron" };
         },
-        any
+        string
       >;
     };
   };

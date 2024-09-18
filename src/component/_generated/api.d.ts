@@ -34,15 +34,36 @@ export type Mounts = {
       "mutation",
       "public",
       { identifier: { id: string } | { name: string } },
-      any
+      {}
     >;
     get: FunctionReference<
       "query",
       "public",
       { identifier: { id: string } | { name: string } },
-      any
+      {
+        args: any;
+        functionHandle: string;
+        id: string;
+        name?: string;
+        schedule:
+          | { kind: "interval"; ms: number }
+          | { cronspec: string; kind: "cron" };
+      } | null
     >;
-    list: FunctionReference<"query", "public", {}, any>;
+    list: FunctionReference<
+      "query",
+      "public",
+      {},
+      Array<{
+        args: any;
+        functionHandle: string;
+        id: string;
+        name?: string;
+        schedule:
+          | { kind: "interval"; ms: number }
+          | { cronspec: string; kind: "cron" };
+      }>
+    >;
     register: FunctionReference<
       "mutation",
       "public",
@@ -51,10 +72,10 @@ export type Mounts = {
         functionHandle: string;
         name?: string;
         schedule:
-          | { cronspec: string; kind: "cron" }
-          | { kind: "interval"; ms: number };
+          | { kind: "interval"; ms: number }
+          | { cronspec: string; kind: "cron" };
       },
-      any
+      string
     >;
   };
 };

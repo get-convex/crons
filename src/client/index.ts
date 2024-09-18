@@ -2,13 +2,15 @@ import {
   createFunctionHandle,
   Expand,
   FunctionArgs,
+  FunctionHandle,
   FunctionReference,
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
   SchedulableFunctionReference,
 } from "convex/server";
-import { Schedule } from "../component/public.js";
+import { api } from "../component/_generated/api.js"; // the component's public api
+import { CronInfo, Schedule } from "../component/public.js";
 import { GenericId } from "convex/values";
 
 // Implementation of crons in user space.
@@ -62,7 +64,7 @@ export function defineCrons(component: UseApi<typeof api>) {
       func: F,
       args: FunctionArgs<F>,
       name?: string
-    ) =>
+    ): Promise<string> =>
       ctx.runMutation(component.public.register, {
         name,
         schedule,
@@ -75,7 +77,15 @@ export function defineCrons(component: UseApi<typeof api>) {
      *
      * @returns List of `cron` table rows.
      */
-    list: async (ctx: RunQueryCtx) => ctx.runQuery(component.public.list, {}),
+    list: async (ctx: RunQueryCtx): Promise<CronInfo[]> => {
+      const crons = await ctx.runQuery(component.public.list, {});
+      return crons.map((cron) => ({
+        ...cron,
+        functionHandle: cron.functionHandle as FunctionHandle<
+          "mutation" | "action"
+        >,
+      }));
+    },
 
     /**
      * Get an existing cron job by id or name.
@@ -86,8 +96,17 @@ export function defineCrons(component: UseApi<typeof api>) {
     get: async (
       ctx: RunQueryCtx,
       identifier: { id: string } | { name: string }
-    ) => {
-      return ctx.runQuery(component.public.get, { identifier });
+    ): Promise<CronInfo | null> => {
+      const cron = await ctx.runQuery(component.public.get, { identifier });
+      if (cron === null) {
+        return null;
+      }
+      return {
+        ...cron,
+        functionHandle: cron.functionHandle as FunctionHandle<
+          "mutation" | "action"
+        >,
+      };
     },
 
     /**
@@ -98,7 +117,7 @@ export function defineCrons(component: UseApi<typeof api>) {
     del: async (
       ctx: RunMutationCtx,
       identifier: { id: string } | { name: string }
-    ) => ctx.runMutation(component.public.del, { identifier }),
+    ): Promise<null> => ctx.runMutation(component.public.del, { identifier }), // XXX does it make sense to return null vs void?
   };
 }
 
@@ -110,9 +129,6 @@ type RunQueryCtx = {
 type RunMutationCtx = {
   runMutation: GenericMutationCtx<GenericDataModel>["runMutation"];
 };
-
-// TODO: Copy in a concrete API from example/_generated/server.d.ts once your API is stable.
-import { api } from "../component/_generated/api.js"; // the component's public api
 
 export type OpaqueIds<T> =
   T extends GenericId<infer _T>
