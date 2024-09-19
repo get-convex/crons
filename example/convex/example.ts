@@ -1,3 +1,5 @@
+// Example of using the CronsClient to register a cron job.
+
 import { v } from "convex/values";
 import { internalMutation, components } from "./_generated/server.js";
 import { internal } from "./_generated/api";

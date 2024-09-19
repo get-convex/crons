@@ -18,7 +18,7 @@ import schema from "./schema.js";
 export type Schedule =
   | { kind: "cron"; cronspec: string }
   | { kind: "interval"; ms: number };
-const scheduleValidator = schema.tables.crons.validator.fields.schedule;
+export const scheduleValidator = schema.tables.crons.validator.fields.schedule;
 
 // XXX should i use the built-in cron type?
 export type CronInfo = {
@@ -28,7 +28,7 @@ export type CronInfo = {
   args: Record<string, unknown>;
   schedule: Schedule;
 };
-const cronInfoValidator = v.object({
+export const cronInfoValidator = v.object({
   id: v.id("crons"),
   name: v.optional(v.string()),
   functionHandle: v.string(),
