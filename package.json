@@ -1,5 +1,5 @@
 {
-  "name": "crons",
+  "name": "@get-convex/crons",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
