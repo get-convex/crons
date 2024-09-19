@@ -29,10 +29,10 @@ const app = defineApp();
 app.use(component, { name: "crons" });
 ```
 
-and can then be used from Convex functions via the `CronsClient` wrapper class:
+and can then be used from Convex functions via the `Crons` wrapper class:
 
 ```typescript
-const crons = new CronsClient(components.crons);
+const crons = new Crons(components.crons);
 
 // ...
 

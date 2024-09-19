@@ -13,6 +13,10 @@ import { api } from "../component/_generated/api.js";
 import { CronInfo, Schedule } from "../component/public.js";
 import { GenericId } from "convex/values";
 
+export type { CronInfo };
+
+// XXX add more functions for different types of schedules
+
 // Implementation of crons in user space.
 //
 // Supports intervals in ms as well as cron schedules with the same format as
@@ -35,7 +39,7 @@ import { GenericId } from "convex/values";
 // cron with a given name. e.g., in an `init.ts` file that gets run on every
 // deploy via `convex dev --run init`:
 //
-// const crons = new CronsClient(components.crons);
+// const crons = new Crons(components.crons);
 // ...
 // if ((await crons.get(ctx, { name: "daily" })) === null) {
 //   await crons.register(
@@ -46,7 +50,7 @@ import { GenericId } from "convex/values";
 //     "daily"
 //   );
 // }
-export class CronsClient {
+export class Crons {
   constructor(private component: UseApi<typeof api>) {}
 
   /**

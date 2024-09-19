@@ -8,8 +8,9 @@
     "lint": "tsc -p convex && eslint convex"
   },
   "dependencies": {
-    "cron-parser": "^4.9.0",
-    "convex": "1.16.0-alpha.2"
+    "@convex-dev/crons": "file:..",
+    "convex": "1.16.0-alpha.2",
+    "cron-parser": "^4.9.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

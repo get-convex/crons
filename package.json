@@ -1,6 +1,8 @@
 {
-  "name": "@get-convex/crons",
-  "version": "0.0.0",
+  "name": "@convex-dev/crons",
+  "version": "0.1.0",
+  "description": "Convex component for scheduling periodic jobs.",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",

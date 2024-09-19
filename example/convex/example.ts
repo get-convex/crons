@@ -1,11 +1,11 @@
-// Example of using the CronsClient to register a cron job.
+// Example of using the Crons component to register a cron job.
 
 import { v } from "convex/values";
 import { internalMutation, components } from "./_generated/server.js";
 import { internal } from "./_generated/api";
-import { CronsClient } from "../../src/client";
+import { Crons } from "@convex-dev/crons";
 
-const crons = new CronsClient(components.crons);
+const crons = new Crons(components.crons);
 
 export const logStuff = internalMutation({
   args: {
