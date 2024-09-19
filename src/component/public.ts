@@ -228,7 +228,7 @@ export const rescheduler = internalMutation({
   args: {
     id: v.id("crons"),
   },
-  returns: {},
+  returns: v.null(),
   handler: async (ctx, { id }) => {
     // Cron job is the logical concept we're rescheduling repeatedly.
     const cronJob = await ctx.db.get(id);
