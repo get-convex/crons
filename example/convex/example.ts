@@ -11,7 +11,7 @@ export const logStuff = internalMutation({
   args: {
     message: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     console.log(args.message);
   },
 });
