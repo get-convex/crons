@@ -41,7 +41,7 @@ export type Mounts = {
       "public",
       { identifier: { id: string } | { name: string } },
       {
-        args: any;
+        args: Record<string, any>;
         functionHandle: string;
         id: string;
         name?: string;
@@ -55,7 +55,7 @@ export type Mounts = {
       "public",
       {},
       Array<{
-        args: any;
+        args: Record<string, any>;
         functionHandle: string;
         id: string;
         name?: string;
@@ -68,7 +68,7 @@ export type Mounts = {
       "mutation",
       "public",
       {
-        args: any;
+        args: Record<string, any>;
         functionHandle: string;
         name?: string;
         schedule:
@@ -92,5 +92,7 @@ export declare const internal: FilterApi<
   typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {};
 
 /* prettier-ignore-end */

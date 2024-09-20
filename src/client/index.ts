@@ -12,7 +12,7 @@ import { RunMutationCtx, RunQueryCtx, UseApi } from "./utils.js";
 
 export type { CronInfo };
 
-// XXX add more functions for different types of schedules
+// TODO (james): should we add helpers for minutely, hourly, etc schedules?
 
 // Implementation of crons in user space.
 //

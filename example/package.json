@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@convex-dev/crons": "file:..",
-    "convex": "1.16.0-alpha.2"
+    "convex": "^1.16.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

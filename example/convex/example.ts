@@ -1,8 +1,8 @@
 // Example of using the Crons component to register a cron job.
 
 import { v } from "convex/values";
-import { internalMutation, components } from "./_generated/server.js";
-import { internal } from "./_generated/api";
+import { internalMutation } from "./_generated/server";
+import { components, internal } from "./_generated/api";
 import { Crons } from "@convex-dev/crons";
 
 const crons = new Crons(components.crons);

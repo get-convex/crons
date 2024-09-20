@@ -31,7 +31,7 @@ const cronInfoValidator = v.object({
   id: v.id("crons"),
   name: v.optional(v.string()),
   functionHandle: v.string(),
-  args: v.any(), // XXX change to args: v.record(v.string(), v.any()),
+  args: v.record(v.string(), v.any()),
   schedule: scheduleValidator,
 });
 
@@ -52,7 +52,7 @@ export const register = mutation({
     name: v.optional(v.string()),
     schedule: scheduleValidator,
     functionHandle: v.string(),
-    args: v.any(), // XXX change to args: v.record(v.string(), v.any()),
+    args: v.record(v.string(), v.any()),
   },
   returns: v.id("crons"),
   handler: async (ctx, { name, schedule, functionHandle, args }) => {
