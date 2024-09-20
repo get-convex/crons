@@ -119,7 +119,7 @@ export class Crons {
    *
    * @param identifier - Either the ID or name of the cron job.
    */
-  async del(
+  async delete(
     ctx: RunMutationCtx,
     identifier: { id: string } | { name: string }
   ): Promise<null> {
