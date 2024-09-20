@@ -1,6 +1,6 @@
 {
   "name": "@convex-dev/crons",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Convex component for scheduling periodic jobs.",
   "license": "Apache-2.0",
   "type": "module",
