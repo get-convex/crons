@@ -35,8 +35,13 @@ See `example/convex/example.ts` for a simple example of how to use this library.
 The component must first be defined in convex.config.ts:
 
 ```typescript
+import { defineApp } from "convex/server";
+import crons from "@convex-dev/crons/convex.config.js";
+
 const app = defineApp();
-app.use(component, { name: "crons" });
+app.use(crons, { name: "crons" });
+
+export default app;
 ```
 
 and can then be used from Convex functions via the `Crons` wrapper class:
