@@ -40,7 +40,7 @@ export const logStuff = internalMutation({
 // showing up in the database while it's in progress.
 export const doSomeStuff = internalMutation({
   handler: async (ctx) => {
-    // Register some crons
+    // Register some crons.
     const namedCronId = await crons.register(
       ctx,
       { kind: "interval", ms: 3600000 },
@@ -57,25 +57,25 @@ export const doSomeStuff = internalMutation({
     );
     console.log("Registered new cron job with ID:", unnamedCronId);
 
-    // Get the cron job by name
+    // Get the cron job by name.
     const cronByName = await crons.get(ctx, { name: "hourly-test" });
     console.log("Retrieved cron job by name:", cronByName);
 
-    // Get the cron job by ID
+    // Get the cron job by ID.
     const cronById = await crons.get(ctx, { id: unnamedCronId });
     console.log("Retrieved cron job by ID:", cronById);
 
-    // List all cron jobs
+    // List all cron jobs.
     const allCrons = await crons.list(ctx);
     console.log("All cron jobs:", allCrons);
 
-    // Delete the cron jobs
+    // Delete the cron jobs.
     await crons.delete(ctx, { name: "hourly-test" });
     console.log("Deleted cron job by name:", "hourly-test");
     await crons.delete(ctx, { id: unnamedCronId });
     console.log("Deleted cron job by ID:", unnamedCronId);
 
-    // Verify deletion
+    // Verify deletion.
     const deletedCronByName = await crons.get(ctx, { name: "hourly-test" });
     console.log("Deleted cron job (should be null):", deletedCronByName);
     const deletedCronById = await crons.get(ctx, { id: unnamedCronId });

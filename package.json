@@ -1,8 +1,21 @@
 {
   "name": "@convex-dev/crons",
-  "version": "0.0.2",
   "description": "Convex component for scheduling periodic jobs.",
+  "repository": "github:get-convex/crons",
+  "homepage": "https://github.com/get-convex/crons#readme",
+  "bugs": {
+    "email": "support@convex.dev",
+    "url": "https://github.com/get-convex/crons/issues"
+  },
+  "version": "0.0.3",
   "license": "Apache-2.0",
+  "keywords": [
+    "convex",
+    "component",
+    "crons",
+    "cron",
+    "scheduler"
+  ],
   "type": "module",
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
@@ -29,7 +42,7 @@
         "default": "./dist/commonjs/client/index.js"
       }
     },
-    "./convex.config.js": {
+    "./convex.config": {
       "import": {
         "@convex-dev/component-source": "./src/component/convex.config.ts",
         "types": "./dist/esm/component/convex.config.d.ts",
@@ -38,7 +51,7 @@
     }
   },
   "dependencies": {
-    "convex": "^1.16.1",
+    "convex": "1.16.2",
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {

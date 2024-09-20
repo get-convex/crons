@@ -1,7 +1,7 @@
 import { defineApp } from "convex/server";
-import crons from "@convex-dev/crons/convex.config.js";
+import crons from "@convex-dev/crons/convex.config";
 
 const app = defineApp();
-app.use(crons, { name: "crons" });
+app.use(crons);
 
 export default app;
