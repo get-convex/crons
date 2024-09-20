@@ -20,6 +20,16 @@ the unix `cron` command:
  └───────────────── second (0 - 59, optional)
 ```
 
+## Installation
+
+Most developers will want to install this via an npm package:
+
+```bash
+npm install @convex-dev/crons
+```
+
+## Usage
+
 See `example/convex/example.ts` for a simple example of how to use this library.
 
 The component must first be defined in convex.config.ts:
@@ -51,6 +61,8 @@ If you'd like to statically define cronjobs like in the built-in `crons.ts`
 Convex feature you can do so via an init script that idempotently registers a
 cron with a given name. e.g., in an `init.ts` file that gets run on every
 deploy via `convex dev --run init`.
+
+## Design
 
 The design of this component is based on the Cronvex demo app that's described in
 [this Stack post](https://stack.convex.dev/cron-jobs).
