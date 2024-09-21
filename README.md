@@ -2,6 +2,8 @@
 
 [![npm version](https://badge.fury.io/js/@convex-dev%2Fcrons.svg)](https://badge.fury.io/js/@convex-dev%2Fcrons)
 
+**Note: Convex Components are currently in beta.**
+
 This Convex component provides functionality for registering and managing cron
 jobs at runtime. Convex comes with built-in support for cron jobs but they must
 be statically defined at deployment time. This library allows for dynamic
