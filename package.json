@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "convex": "1.16.5",
+    "convex": "^1.16.5",
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {
