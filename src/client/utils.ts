@@ -1,13 +1,13 @@
 // Type utilities for component clients.
 
-import {
+import type {
   Expand,
   FunctionReference,
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
 } from "convex/server";
-import { GenericId } from "convex/values";
+import type { GenericId } from "convex/values";
 
 export type RunQueryCtx = {
   runQuery: GenericQueryCtx<GenericDataModel>["runQuery"];
