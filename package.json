@@ -50,8 +50,10 @@
       }
     }
   },
+  "peerDependencies": {
+    "convex": "~1.16.5 || ~1.17.0"
+  },
   "dependencies": {
-    "convex": "^1.16.5",
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {
