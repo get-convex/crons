@@ -2,14 +2,30 @@
 
 [![npm version](https://badge.fury.io/js/@convex-dev%2Fcrons.svg)](https://badge.fury.io/js/@convex-dev%2Fcrons)
 
-**Note: Convex Components are currently in beta.**
-
 <!-- START: Include on https://convex.dev/components -->
 
 This Convex component provides functionality for registering and managing cron
 jobs at runtime. Convex comes with built-in support for cron jobs but they must
 be statically defined at deployment time. This library allows for dynamic
 registration of cron jobs at runtime.
+
+```ts
+// Register a cron to run once per day.
+const daily = await crons.register(
+  ctx,
+  { kind: "cron", cronspec: "0 0 * * *" },
+  internal.example.logStuff,
+  { message: "daily cron" }
+);
+
+// Register a cron to run every hour.
+const hourly = await crons.register(
+  ctx,
+  { kind: "interval", ms: 3600000 },
+  internal.example.logStuff,
+  { message: "hourly cron" }
+);
+```
 
 It supports intervals in milliseconds as well as cron schedules with the same
 format as the unix `cron` command:
