@@ -12,42 +12,46 @@ import { RunMutationCtx, RunQueryCtx, UseApi } from "./utils.js";
 
 export type { CronInfo };
 
-// TODO (james): should we add helpers for minutely, hourly, etc schedules?
-
-// Implementation of crons in user space.
-//
-// Supports intervals in ms as well as cron schedules with the same format as
-// the unix `cron` command:
-//
-//  *  *  *  *  *  *
-//  ┬  ┬  ┬  ┬  ┬  ┬
-//  │  │  │  │  │  |
-//  │  │  │  │  │  └── day of week (0 - 7, 1L - 7L) (0 or 7 is Sun)
-//  │  │  │  │  └───── month (1 - 12)
-//  │  │  │  └──────── day of month (1 - 31, L)
-//  │  │  └─────────── hour (0 - 23)
-//  │  └────────────── minute (0 - 59)
-//  └───────────────── second (0 - 59, optional)
-//
-// Crons can be registered at runtime via the `register` function.
-//
-// If you'd like to statically define cronjobs like in the built-in `crons.ts`
-// Convex feature you can do so via an init script that idempotently registers a
-// cron with a given name. e.g., in an `init.ts` file that gets run on every
-// deploy via `convex dev --run init`:
-//
-// const crons = new Crons(components.crons);
-// ...
-// if ((await crons.get(ctx, { name: "daily" })) === null) {
-//   await crons.register(
-//     ctx,
-//     { kind: "cron", cronspec: "0 0 * * *" },
-//     internal.example.logStuff,
-//     { message: "daily cron" },
-//     "daily"
-//   );
-// }
 export class Crons {
+  /**
+   * Implementation of crons in user space.
+   *
+   * Supports intervals in ms as well as cron schedules with the same format as
+   * the unix `cron` command:
+   *
+   * ```
+   *  *  *  *  *  *  *
+   *  ┬  ┬  ┬  ┬  ┬  ┬
+   *  │  │  │  │  │  |
+   *  │  │  │  │  │  └── day of week (0 - 7, 1L - 7L) (0 or 7 is Sun)
+   *  │  │  │  │  └───── month (1 - 12)
+   *  │  │  │  └──────── day of month (1 - 31, L)
+   *  │  │  └─────────── hour (0 - 23)
+   *  │  └────────────── minute (0 - 59)
+   *  └───────────────── second (0 - 59, optional)
+   * ```
+   *
+   * Crons can be registered at runtime via the `register` function.
+   *
+   * If you'd like to statically define cronjobs like in the built-in `crons.ts`
+   * Convex feature you can do so via an init script that idempotently registers a
+   * cron with a given name. e.g., in an `init.ts` file that gets run on every
+   * deploy via `convex dev --run init`:
+   *
+   * ```ts
+   * const crons = new Crons(components.crons);
+   * ...
+   * if ((await crons.get(ctx, { name: "daily" })) === null) {
+   *   await crons.register(
+   *     ctx,
+   *     { kind: "cron", cronspec: "0 0 * * *" },
+   *     internal.example.logStuff,
+   *     { message: "daily cron" },
+   *     "daily"
+   *   );
+   * }
+   * ```
+   */
   constructor(private component: UseApi<typeof api>) {}
 
   /**

@@ -15,9 +15,33 @@ import { Doc, Id } from "./_generated/dataModel.js";
 import parser from "cron-parser";
 import schema from "./schema.js";
 
+// TODO (james): should we add helpers for minutely, hourly, etc schedules?
 export type Schedule =
-  | { kind: "cron"; cronspec: string }
-  | { kind: "interval"; ms: number };
+  | {
+      /** A schedule using a cron specification string. */
+      kind: "cron";
+      /**
+       * A cron specification string.
+       * ```
+       *  *  *  *  *  *  *
+       *  ┬  ┬  ┬  ┬  ┬  ┬
+       *  │  │  │  │  │  |
+       *  │  │  │  │  │  └── day of week (0 - 7, 1L - 7L) (0 or 7 is Sun)
+       *  │  │  │  │  └───── month (1 - 12)
+       *  │  │  │  └──────── day of month (1 - 31, L)
+       *  │  │  └─────────── hour (0 - 23)
+       *  │  └────────────── minute (0 - 59)
+       *  └───────────────── second (0 - 59, optional)
+       * ```
+       */
+      cronspec: string;
+    }
+  | {
+      /** A schedule using an interval in milliseconds. */
+      kind: "interval";
+      /** The interval in milliseconds. */
+      ms: number;
+    };
 const scheduleValidator = schema.tables.crons.validator.fields.schedule;
 
 export type CronInfo = {
