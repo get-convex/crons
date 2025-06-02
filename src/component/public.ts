@@ -35,6 +35,7 @@ export type Schedule =
        * ```
        */
       cronspec: string;
+      tz?: string; // Optional timezone, e.g. "America/New_York".
     }
   | {
       /** A schedule using an interval in milliseconds. */
@@ -112,7 +113,7 @@ function validateSchedule(schedule: Schedule) {
   }
   if (schedule.kind === "cron") {
     try {
-      parser.parseExpression(schedule.cronspec);
+      parser.parseExpression(schedule.cronspec, { tz: schedule.tz });
     } catch {
       throw new Error(`Invalid cronspec: "${schedule.cronspec}"`);
     }
@@ -140,6 +141,7 @@ function calculateNextRun(lastScheduled: Date, schedule: Schedule): Date {
   } else {
     const cron = parser.parseExpression(schedule.cronspec, {
       currentDate: lastScheduled,
+      tz: schedule.tz,
     });
     return cron.next().toDate();
   }
