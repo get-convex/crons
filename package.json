@@ -1,14 +1,7 @@
 {
   "name": "@convex-dev/crons",
-  "description": "Convex component for scheduling periodic jobs.",
-  "repository": "github:get-convex/crons",
-  "homepage": "https://github.com/get-convex/crons#readme",
-  "bugs": {
-    "email": "support@convex.dev",
-    "url": "https://github.com/get-convex/crons/issues"
-  },
   "version": "0.1.8",
-  "license": "Apache-2.0",
+  "description": "Convex component for scheduling periodic jobs.",
   "keywords": [
     "convex",
     "component",
@@ -16,18 +9,14 @@
     "cron",
     "scheduler"
   ],
-  "type": "module",
-  "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --project ./esm.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
-    "build:cjs": "tsc --project ./commonjs.json && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/commonjs/package.json",
-    "typecheck": "tsc --noEmit",
-    "prepare": "npm run build"
+  "homepage": "https://github.com/get-convex/crons#readme",
+  "bugs": {
+    "url": "https://github.com/get-convex/crons/issues",
+    "email": "support@convex.dev"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "repository": "github:get-convex/crons",
+  "license": "Apache-2.0",
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -50,22 +39,34 @@
       }
     }
   },
-  "peerDependencies": {
-    "convex": "~1.16.5 || >=1.17.0 <1.35.0"
+  "main": "./dist/commonjs/client/index.js",
+  "module": "./dist/esm/client/index.js",
+  "types": "./dist/commonjs/client/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:cjs": "tsc --project ./commonjs.json && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/commonjs/package.json",
+    "build:esm": "tsc --project ./esm.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
+    "lint": "eslint --ext .ts src",
+    "prepare": "npm run build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "cron-parser": "^4.9.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
+    "@eslint/js": "^9.28.0",
     "@types/node": "^18.17.0",
-    "eslint": "^9.9.1",
-    "globals": "^15.9.0",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0",
     "prettier": "3.2.5",
     "typescript": "~5.0.3",
-    "typescript-eslint": "^8.4.0"
+    "typescript-eslint": "^8.33.1"
   },
-  "main": "./dist/commonjs/client/index.js",
-  "types": "./dist/commonjs/client/index.d.ts",
-  "module": "./dist/esm/client/index.js"
+  "peerDependencies": {
+    "convex": "~1.16.5 || >=1.17.0 <1.35.0"
+  }
 }
