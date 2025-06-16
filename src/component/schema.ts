@@ -15,6 +15,7 @@ export default defineSchema({
       v.object({
         kind: v.literal("cron"),
         cronspec: v.string(), // "* * * * *"
+        tz: v.optional(v.string()), // optional timezone, e.g. "America/New_York"
       })
     ),
     schedulerJobId: v.optional(v.id("_scheduled_functions")), // job to wait for the next execution
