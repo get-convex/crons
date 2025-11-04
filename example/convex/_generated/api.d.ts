@@ -1,5 +1,3 @@
-/* prettier-ignore-start */
-
 /* eslint-disable */
 /**
  * Generated `api` utility.
@@ -17,6 +15,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+
 /**
  * A utility for referencing Convex functions in your app's API.
  *
@@ -28,14 +27,13 @@ import type {
 declare const fullApi: ApiFromModules<{
   example: typeof example;
 }>;
-declare const fullApiWithMounts: typeof fullApi;
 
 export declare const api: FilterApi<
-  typeof fullApiWithMounts,
+  typeof fullApi,
   FunctionReference<any, "public">
 >;
 export declare const internal: FilterApi<
-  typeof fullApiWithMounts,
+  typeof fullApi,
   FunctionReference<any, "internal">
 >;
 
@@ -59,7 +57,7 @@ export declare const components: {
           name?: string;
           schedule:
             | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron" };
+            | { cronspec: string; kind: "cron"; tz?: string };
         } | null
       >;
       list: FunctionReference<
@@ -73,7 +71,7 @@ export declare const components: {
           name?: string;
           schedule:
             | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron" };
+            | { cronspec: string; kind: "cron"; tz?: string };
         }>
       >;
       register: FunctionReference<
@@ -85,12 +83,10 @@ export declare const components: {
           name?: string;
           schedule:
             | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron" };
+            | { cronspec: string; kind: "cron"; tz?: string };
         },
         string
       >;
     };
   };
 };
-
-/* prettier-ignore-end */
