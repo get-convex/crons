@@ -6,9 +6,9 @@ import {
   FunctionHandle,
   SchedulableFunctionReference,
 } from "convex/server";
-import { api } from "../component/_generated/api.js";
+import { ComponentApi } from "../component/_generated/component.js";
 import { CronInfo, Schedule } from "../component/public.js";
-import { RunMutationCtx, RunQueryCtx, UseApi } from "./utils.js";
+import { RunMutationCtx, RunQueryCtx } from "./utils.js";
 
 export type { CronInfo };
 
@@ -52,7 +52,7 @@ export class Crons {
    * }
    * ```
    */
-  constructor(private component: UseApi<typeof api>) {}
+  constructor(private component: ComponentApi) {}
 
   /**
    * Schedule a mutation or action to run on a cron schedule or interval.

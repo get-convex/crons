@@ -31,6 +31,9 @@
         "default": "./dist/commonjs/client/index.js"
       }
     },
+    "./_generated/component.js": {
+      "types": "./dist/esm/component/_generated/component.d.ts"
+    },
     "./convex.config": {
       "import": {
         "@convex-dev/component-source": "./src/component/convex.config.ts",
