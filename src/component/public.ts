@@ -2,16 +2,16 @@
 //
 // See ../client/index.ts for the public API.
 
-import { FunctionHandle } from "convex/server";
+import type { FunctionHandle } from "convex/server";
 import { v } from "convex/values";
 import {
-  MutationCtx,
+  type MutationCtx,
   mutation,
   query,
   internalMutation,
 } from "./_generated/server.js";
 import { internal } from "./_generated/api.js";
-import { Doc, Id } from "./_generated/dataModel.js";
+import type { Doc, Id } from "./_generated/dataModel.js";
 import parser from "cron-parser";
 import schema from "./schema.js";
 

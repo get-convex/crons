@@ -2,13 +2,13 @@
 
 import {
   createFunctionHandle,
-  FunctionArgs,
-  FunctionHandle,
-  SchedulableFunctionReference,
+  type FunctionArgs,
+  type FunctionHandle,
+  type SchedulableFunctionReference,
 } from "convex/server";
-import { ComponentApi } from "../component/_generated/component.js";
-import { CronInfo, Schedule } from "../component/public.js";
-import { RunMutationCtx, RunQueryCtx } from "./utils.js";
+import type { ComponentApi } from "../component/_generated/component.js";
+import type { CronInfo, Schedule } from "../component/public.js";
+import type { RunMutationCtx, RunQueryCtx } from "./utils.js";
 
 export type { CronInfo };
 
