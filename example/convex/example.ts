@@ -19,7 +19,7 @@ export const registerDailyCron = internalMutation({
         {
           message: "daily cron",
         },
-        "daily"
+        "daily",
       );
     }
   },
@@ -46,14 +46,14 @@ export const doSomeStuff = internalMutation({
       { kind: "interval", ms: 3600000 },
       internal.example.logStuff,
       { message: "Hourly cron test" },
-      "hourly-test"
+      "hourly-test",
     );
     console.log("Registered new cron job with ID:", namedCronId);
     const unnamedCronId = await crons.register(
       ctx,
       { kind: "cron", cronspec: "0 * * * *" },
       internal.example.logStuff,
-      { message: "Minutely cron test" }
+      { message: "Minutely cron test" },
     );
     console.log("Registered new cron job with ID:", unnamedCronId);
 
@@ -92,7 +92,7 @@ export const selfDeletingCron = internalMutation({
       { kind: "interval", ms: 10000 },
       internal.example.deleteSelf,
       { name: "self-deleting-cron" },
-      "self-deleting-cron"
+      "self-deleting-cron",
     );
 
     console.log("Registered self-deleting cron job with ID:", cronId);

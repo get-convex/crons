@@ -71,7 +71,7 @@ export class Crons {
     schedule: Schedule,
     func: F,
     args: FunctionArgs<F>,
-    name?: string
+    name?: string,
   ): Promise<string> {
     return ctx.runMutation(this.component.public.register, {
       name,
@@ -104,7 +104,7 @@ export class Crons {
    */
   async get(
     ctx: RunQueryCtx,
-    identifier: { id: string } | { name: string }
+    identifier: { id: string } | { name: string },
   ): Promise<CronInfo | null> {
     const cron = await ctx.runQuery(this.component.public.get, { identifier });
     if (cron === null) {
@@ -125,7 +125,7 @@ export class Crons {
    */
   async delete(
     ctx: RunMutationCtx,
-    identifier: { id: string } | { name: string }
+    identifier: { id: string } | { name: string },
   ): Promise<null> {
     return ctx.runMutation(this.component.public.del, { identifier });
   }

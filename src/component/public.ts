@@ -99,7 +99,7 @@ export const register = mutation({
       schedule,
     });
     console.log(
-      `Scheduling cron "${name}" (${id}) on schedule ${JSON.stringify(schedule)}`
+      `Scheduling cron "${name}" (${id}) on schedule ${JSON.stringify(schedule)}`,
     );
 
     await scheduleNextRun(ctx, id, new Date(), schedule);
@@ -124,13 +124,13 @@ async function scheduleNextRun(
   ctx: MutationCtx,
   id: Id<"crons">,
   lastScheduled: Date,
-  schedule: Schedule
+  schedule: Schedule,
 ) {
   const nextRun = calculateNextRun(lastScheduled, schedule);
   const schedulerJobId = await ctx.scheduler.runAt(
     nextRun,
     internal.public.rescheduler,
-    { id }
+    { id },
   );
   await ctx.db.patch(id, { schedulerJobId });
 }
@@ -177,7 +177,7 @@ export const get = query({
   args: {
     identifier: v.union(
       v.object({ id: v.id("crons") }),
-      v.object({ name: v.string() })
+      v.object({ name: v.string() }),
     ),
   },
   returns: v.union(cronInfoValidator, v.null()),
@@ -209,7 +209,7 @@ export const del = mutation({
   args: {
     identifier: v.union(
       v.object({ id: v.id("crons") }),
-      v.object({ name: v.string() })
+      v.object({ name: v.string() }),
     ),
   },
   returns: v.null(),
@@ -276,7 +276,7 @@ export const rescheduler = internalMutation({
       schedulerJob.state.kind !== "inProgress"
     ) {
       throw Error(
-        `We are running in job ${schedulerJob._id} but state is ${schedulerJob.state.kind}`
+        `We are running in job ${schedulerJob._id} but state is ${schedulerJob.state.kind}`,
       );
     }
 
@@ -299,7 +299,7 @@ export const rescheduler = internalMutation({
       await ctx.scheduler.runAfter(
         0,
         cronJob.functionHandle as FunctionHandle<"mutation" | "action">,
-        cronJob.args
+        cronJob.args,
       );
     }
 
@@ -307,7 +307,7 @@ export const rescheduler = internalMutation({
       ctx,
       id,
       new Date(schedulerJob.scheduledTime),
-      cronJob.schedule
+      cronJob.schedule,
     );
   },
 });

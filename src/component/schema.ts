@@ -16,7 +16,7 @@ export default defineSchema({
         kind: v.literal("cron"),
         cronspec: v.string(), // "* * * * *"
         tz: v.optional(v.string()), // optional timezone, e.g. "America/New_York"
-      })
+      }),
     ),
     schedulerJobId: v.optional(v.id("_scheduled_functions")), // job to wait for the next execution
     executionJobId: v.optional(v.id("_scheduled_functions")), // async job to run the function
