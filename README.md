@@ -15,7 +15,7 @@ const daily = await crons.register(
   ctx,
   { kind: "cron", cronspec: "0 0 * * *" },
   internal.example.logStuff,
-  { message: "daily cron" }
+  { message: "daily cron" },
 );
 
 // Register a cron to run every hour.
@@ -23,7 +23,7 @@ const hourly = await crons.register(
   ctx,
   { kind: "interval", ms: 3600000 },
   internal.example.logStuff,
-  { message: "hourly cron" }
+  { message: "hourly cron" },
 );
 ```
 
@@ -44,16 +44,17 @@ format as the unix `cron` command:
 
 ### Design
 
-The design of this component is based on the Cronvex demo app that's described in
-[this Stack post](https://stack.convex.dev/cron-jobs).
+The design of this component is based on the Cronvex demo app that's described
+in [this Stack post](https://stack.convex.dev/cron-jobs).
 
 ## Pre-requisite: Convex
 
-You'll need an existing Convex project to use the component.
-Convex is a hosted backend platform, including a database, serverless functions,
-and a ton more you can learn about [here](https://docs.convex.dev/get-started).
+You'll need an existing Convex project to use the component. Convex is a hosted
+backend platform, including a database, serverless functions, and a ton more you
+can learn about [here](https://docs.convex.dev/get-started).
 
-Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.dev/home) to set one up.
+Run `npm create convex` or follow any of the
+[quickstarts](https://docs.convex.dev/home) to set one up.
 
 ## Installation
 
@@ -63,7 +64,8 @@ Install the component package:
 npm install @convex-dev/crons
 ```
 
-Create a `convex.config.ts` file in your app's `convex/` folder and install the component by calling `use`:
+Create a `convex.config.ts` file in your app's `convex/` folder and install the
+component by calling `use`:
 
 ```ts
 // convex/convex.config.ts
@@ -122,14 +124,14 @@ export const doSomeStuff = internalMutation({
       { kind: "interval", ms: 3600000 },
       internal.example.logStuff,
       { message: "Hourly cron test" },
-      "hourly-test"
+      "hourly-test",
     );
     console.log("Registered new cron job with ID:", namedCronId);
     const unnamedCronId = await crons.register(
       ctx,
       { kind: "cron", cronspec: "0 * * * *" },
       internal.example.logStuff,
-      { message: "Minutely cron test" }
+      { message: "Minutely cron test" },
     );
     console.log("Registered new cron job with ID:", unnamedCronId);
 
@@ -162,8 +164,8 @@ export const doSomeStuff = internalMutation({
 
 If you'd like to statically define cronjobs like in the built-in `crons.ts`
 Convex feature you can do so via an init script that idempotently registers a
-cron with a given name. e.g., in an `init.ts` file that gets run on every
-deploy via `convex dev --run init`.
+cron with a given name. e.g., in an `init.ts` file that gets run on every deploy
+via `convex dev --run init`.
 
 ```ts
 // Register a daily cron job. This could be called from an init script to make
@@ -178,7 +180,7 @@ export const registerDailyCron = internalMutation({
         {
           message: "daily cron",
         },
-        "daily"
+        "daily",
       );
     }
   },
@@ -200,7 +202,7 @@ export const selfDeletingCron = internalMutation({
       { kind: "interval", ms: 10000 },
       internal.example.deleteSelf,
       { name: "self-deleting-cron" },
-      "self-deleting-cron"
+      "self-deleting-cron",
     );
 
     console.log("Registered self-deleting cron job with ID:", cronId);
