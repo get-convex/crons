@@ -47,55 +47,5 @@ export declare const internal: FilterApi<
 >;
 
 export declare const components: {
-  crons: {
-    public: {
-      del: FunctionReference<
-        "mutation",
-        "internal",
-        { identifier: { id: string } | { name: string } },
-        null
-      >;
-      get: FunctionReference<
-        "query",
-        "internal",
-        { identifier: { id: string } | { name: string } },
-        {
-          args: Record<string, any>;
-          functionHandle: string;
-          id: string;
-          name?: string;
-          schedule:
-            | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron"; tz?: string };
-        } | null
-      >;
-      list: FunctionReference<
-        "query",
-        "internal",
-        {},
-        Array<{
-          args: Record<string, any>;
-          functionHandle: string;
-          id: string;
-          name?: string;
-          schedule:
-            | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron"; tz?: string };
-        }>
-      >;
-      register: FunctionReference<
-        "mutation",
-        "internal",
-        {
-          args: Record<string, any>;
-          functionHandle: string;
-          name?: string;
-          schedule:
-            | { kind: "interval"; ms: number }
-            | { cronspec: string; kind: "cron"; tz?: string };
-        },
-        string
-      >;
-    };
-  };
+  crons: import("@convex-dev/crons/_generated/component.js").ComponentApi<"crons">;
 };
