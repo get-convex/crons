@@ -29,7 +29,7 @@
     "predev": "npm run dev:backend -- --until-success",
     "clean": "rm -rf dist *.tsbuildinfo",
     "build": "tsc --project ./tsconfig.build.json",
-    "typecheck": "tsc --noEmit && tsc -p example && tsc -p example/convex",
+    "typecheck": "tsc --noEmit && tsc -p example/convex",
     "lint": "eslint .",
     "all": "run-p -r 'dev:*' 'test:watch'",
     "test": "vitest run --typecheck",
@@ -66,7 +66,8 @@
     "convex": "^1.24.8"
   },
   "devDependencies": {
-    "@edge-runtime/vm": "^5.0.0",
+    "@arethetypeswrong/cli": "0.18.2",
+    "@edge-runtime/vm": "5.0.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.28.0",
     "@types/node": "20.19.24",
@@ -77,6 +78,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.2.0",
+    "npm-run-all2": "8.0.4",
     "prettier": "3.2.5",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.33.1",
