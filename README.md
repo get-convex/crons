@@ -70,7 +70,7 @@ component by calling `use`:
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import crons from "@convex-dev/crons/convex.config";
+import crons from "@convex-dev/crons/convex.config.js";
 
 const app = defineApp();
 app.use(crons);

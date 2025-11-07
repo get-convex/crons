@@ -54,6 +54,10 @@
     "./convex.config": {
       "types": "./dist/component/convex.config.d.ts",
       "default": "./dist/component/convex.config.js"
+    },
+    "./convex.config.js": {
+      "types": "./dist/component/convex.config.d.ts",
+      "default": "./dist/component/convex.config.js"
     }
   },
   "module": "./dist/client/index.js",
