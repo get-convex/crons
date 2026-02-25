@@ -125,6 +125,7 @@ async function scheduleNextRun(
   id: Id<"crons">,
   lastScheduled: Date,
   schedule: Schedule,
+  extraPatch?: Partial<Pick<Doc<"crons">, "executionJobId">>,
 ) {
   const nextRun = calculateNextRun(lastScheduled, schedule);
   const schedulerJobId = await ctx.scheduler.runAt(
@@ -132,7 +133,7 @@ async function scheduleNextRun(
     internal.public.rescheduler,
     { id },
   );
-  await ctx.db.patch(id, { schedulerJobId });
+  await ctx.db.patch(id, { schedulerJobId, ...extraPatch });
 }
 
 function calculateNextRun(lastScheduled: Date, schedule: Schedule): Date {
@@ -296,18 +297,21 @@ export const rescheduler = internalMutation({
       console.log(`Cron ${cronJob._id} still running, skipping this run.`);
     } else {
       console.log(`Running cron ${cronJob._id}.`);
-      await ctx.scheduler.runAfter(
+      const executionJobId = await ctx.scheduler.runAfter(
         0,
         cronJob.functionHandle as FunctionHandle<"mutation" | "action">,
         cronJob.args,
       );
+      await scheduleNextRun(
+        ctx,
+        id,
+        new Date(schedulerJob.scheduledTime),
+        cronJob.schedule,
+        { executionJobId },
+      );
+      return;
     }
 
-    await scheduleNextRun(
-      ctx,
-      id,
-      new Date(schedulerJob.scheduledTime),
-      cronJob.schedule,
-    );
+    await scheduleNextRun(ctx, id, new Date(schedulerJob.scheduledTime), cronJob.schedule);
   },
 });
