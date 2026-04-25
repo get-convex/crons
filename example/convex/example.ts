@@ -10,6 +10,7 @@ const crons = new Crons(components.crons);
 // Register a daily cron job. This could be called from an init script to make
 // sure it's always registered, like the built-in crons in Convex.
 export const registerDailyCron = internalMutation({
+  args: {},
   handler: async (ctx) => {
     if ((await crons.get(ctx, { name: "daily" })) === null) {
       await crons.register(
@@ -39,6 +40,7 @@ export const logStuff = internalMutation({
 // transaction and cleans up after itself so you won't actually see these crons
 // showing up in the database while it's in progress.
 export const doSomeStuff = internalMutation({
+  args: {},
   handler: async (ctx) => {
     // Register some crons.
     const namedCronId = await crons.register(
@@ -86,6 +88,7 @@ export const doSomeStuff = internalMutation({
 // This will schedule a cron job to run every 10 seconds but then delete itself
 // the first time it runs.
 export const selfDeletingCron = internalMutation({
+  args: {},
   handler: async (ctx) => {
     const cronId = await crons.register(
       ctx,
