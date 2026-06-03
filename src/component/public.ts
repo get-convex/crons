@@ -267,7 +267,10 @@ export const rescheduler = internalMutation({
 
     // Scheduler job is the job that's running right now, that we use to trigger
     // repeated executions.
-    const schedulerJob = await ctx.db.system.get("_scheduled_functions", cronJob.schedulerJobId);
+    const schedulerJob = await ctx.db.system.get(
+      "_scheduled_functions",
+      cronJob.schedulerJobId,
+    );
     if (!schedulerJob) {
       throw Error(`Scheduler job ${cronJob.schedulerJobId} not found`);
     }
@@ -283,7 +286,10 @@ export const rescheduler = internalMutation({
     // Execution job is the previous job used to actually do the work of the cron.
     let stillRunning = false;
     if (cronJob.executionJobId) {
-      const executionJob = await ctx.db.system.get("_scheduled_functions", cronJob.executionJobId);
+      const executionJob = await ctx.db.system.get(
+        "_scheduled_functions",
+        cronJob.executionJobId,
+      );
       if (
         executionJob &&
         (executionJob.state.kind === "pending" ||
@@ -304,6 +310,11 @@ export const rescheduler = internalMutation({
       await ctx.db.patch("crons", id, { executionJobId });
     }
 
-    await scheduleNextRun(ctx, id, new Date(schedulerJob.scheduledTime), cronJob.schedule);
+    await scheduleNextRun(
+      ctx,
+      id,
+      new Date(schedulerJob.scheduledTime),
+      cronJob.schedule,
+    );
   },
 });
