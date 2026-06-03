@@ -125,7 +125,6 @@ async function scheduleNextRun(
   id: Id<"crons">,
   lastScheduled: Date,
   schedule: Schedule,
-  extraPatch?: Partial<Pick<Doc<"crons">, "executionJobId">>,
 ) {
   const nextRun = calculateNextRun(lastScheduled, schedule);
   const schedulerJobId = await ctx.scheduler.runAt(
@@ -133,7 +132,7 @@ async function scheduleNextRun(
     internal.public.rescheduler,
     { id },
   );
-  await ctx.db.patch(id, { schedulerJobId, ...extraPatch });
+  await ctx.db.patch("crons", id, { schedulerJobId });
 }
 
 function calculateNextRun(lastScheduled: Date, schedule: Schedule): Date {
@@ -185,7 +184,7 @@ export const get = query({
   handler: async (ctx, { identifier }) => {
     const cron =
       "id" in identifier
-        ? await ctx.db.get(identifier.id)
+        ? await ctx.db.get("crons", identifier.id)
         : await ctx.db
             .query("crons")
             .withIndex("name", (q) => q.eq("name", identifier.name))
@@ -217,7 +216,7 @@ export const del = mutation({
   handler: async (ctx, { identifier }) => {
     let cron: Doc<"crons"> | null;
     if ("id" in identifier) {
-      cron = await ctx.db.get(identifier.id);
+      cron = await ctx.db.get("crons", identifier.id);
       if (!cron) {
         throw new Error(`Cron ${identifier.id} not found`);
       }
@@ -240,7 +239,7 @@ export const del = mutation({
       await ctx.scheduler.cancel(cron.executionJobId);
     }
     console.log(`Deleting cron ${cron._id}`);
-    await ctx.db.delete(cron._id);
+    await ctx.db.delete("crons", cron._id);
   },
 });
 
@@ -258,7 +257,7 @@ export const rescheduler = internalMutation({
   returns: v.null(),
   handler: async (ctx, { id }) => {
     // Cron job is the logical concept we're rescheduling repeatedly.
-    const cronJob = await ctx.db.get(id);
+    const cronJob = await ctx.db.get("crons", id);
     if (!cronJob) {
       throw Error(`Cron ${id} not found`);
     }
@@ -268,7 +267,7 @@ export const rescheduler = internalMutation({
 
     // Scheduler job is the job that's running right now, that we use to trigger
     // repeated executions.
-    const schedulerJob = await ctx.db.system.get(cronJob.schedulerJobId);
+    const schedulerJob = await ctx.db.system.get("_scheduled_functions", cronJob.schedulerJobId);
     if (!schedulerJob) {
       throw Error(`Scheduler job ${cronJob.schedulerJobId} not found`);
     }
@@ -284,7 +283,7 @@ export const rescheduler = internalMutation({
     // Execution job is the previous job used to actually do the work of the cron.
     let stillRunning = false;
     if (cronJob.executionJobId) {
-      const executionJob = await ctx.db.system.get(cronJob.executionJobId);
+      const executionJob = await ctx.db.system.get("_scheduled_functions", cronJob.executionJobId);
       if (
         executionJob &&
         (executionJob.state.kind === "pending" ||
@@ -302,14 +301,7 @@ export const rescheduler = internalMutation({
         cronJob.functionHandle as FunctionHandle<"mutation" | "action">,
         cronJob.args,
       );
-      await scheduleNextRun(
-        ctx,
-        id,
-        new Date(schedulerJob.scheduledTime),
-        cronJob.schedule,
-        { executionJobId },
-      );
-      return;
+      await ctx.db.patch("crons", id, { executionJobId });
     }
 
     await scheduleNextRun(ctx, id, new Date(schedulerJob.scheduledTime), cronJob.schedule);
