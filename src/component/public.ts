@@ -296,18 +296,14 @@ export const rescheduler = internalMutation({
       console.log(`Cron ${cronJob._id} still running, skipping this run.`);
     } else {
       console.log(`Running cron ${cronJob._id}.`);
-      await ctx.scheduler.runAfter(
+      const executionJobId = await ctx.scheduler.runAfter(
         0,
         cronJob.functionHandle as FunctionHandle<"mutation" | "action">,
         cronJob.args,
       );
+      await ctx.db.patch("crons", id, { executionJobId });
     }
 
-    await scheduleNextRun(
-      ctx,
-      id,
-      new Date(schedulerJob.scheduledTime),
-      cronJob.schedule,
-    );
+    await scheduleNextRun(ctx, id, new Date(schedulerJob.scheduledTime), cronJob.schedule);
   },
 });
