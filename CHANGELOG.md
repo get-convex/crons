@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Fix cron overlap skipping by persisting executionJobId (#21)
+
 ## 0.2.0
 
 - Adds /test and /\_generated/component.js entrypoints
