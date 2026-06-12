@@ -8,7 +8,7 @@ import {
 } from "convex/server";
 import type { ComponentApi } from "../component/_generated/component.js";
 import type { CronInfo, Schedule } from "../component/public.js";
-import type { RunMutationCtx, RunQueryCtx } from "./utils.js";
+import type { ActionCtx, MutationCtx, QueryCtx } from "./utils.js";
 
 export type { CronInfo };
 
@@ -67,7 +67,7 @@ export class Crons {
    * @returns A string identifier for the cron job.
    */
   async register<F extends SchedulableFunctionReference>(
-    ctx: RunMutationCtx,
+    ctx: MutationCtx | ActionCtx,
     schedule: Schedule,
     func: F,
     args: FunctionArgs<F>,
@@ -86,7 +86,7 @@ export class Crons {
    *
    * @returns List of `cron` table rows.
    */
-  async list(ctx: RunQueryCtx): Promise<CronInfo[]> {
+  async list(ctx: QueryCtx | MutationCtx | ActionCtx): Promise<CronInfo[]> {
     const crons = await ctx.runQuery(this.component.public.list, {});
     return crons.map((cron) => ({
       ...cron,
@@ -103,7 +103,7 @@ export class Crons {
    * @returns Cron job document.
    */
   async get(
-    ctx: RunQueryCtx,
+    ctx: QueryCtx | MutationCtx | ActionCtx,
     identifier: { id: string } | { name: string },
   ): Promise<CronInfo | null> {
     const cron = await ctx.runQuery(this.component.public.get, { identifier });
@@ -124,7 +124,7 @@ export class Crons {
    * @param identifier - Either the ID or name of the cron job.
    */
   async delete(
-    ctx: RunMutationCtx,
+    ctx: MutationCtx | ActionCtx,
     identifier: { id: string } | { name: string },
   ): Promise<null> {
     return ctx.runMutation(this.component.public.del, { identifier });
