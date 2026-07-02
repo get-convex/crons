@@ -68,24 +68,24 @@
     "convex": "^1.24.8"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.18.3",
+    "@arethetypeswrong/cli": "0.18.4",
     "@convex-dev/eslint-plugin": "2.0.0",
     "@edge-runtime/vm": "5.0.0",
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
-    "@types/node": "24.12.4",
-    "@typescript-eslint/eslint-plugin": "8.60.0",
-    "@typescript-eslint/parser": "8.60.0",
+    "@types/node": "24.13.2",
+    "@typescript-eslint/eslint-plugin": "8.62.0",
+    "@typescript-eslint/parser": "8.62.0",
     "chokidar-cli": "3.0.0",
-    "convex": "1.39.1",
-    "convex-test": "0.0.53",
-    "eslint": "10.4.1",
+    "convex": "1.42.0",
+    "convex-test": "0.0.54",
+    "eslint": "10.6.0",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-refresh": "0.5.2",
-    "globals": "17.6.0",
-    "prettier": "3.8.3",
+    "eslint-plugin-react-refresh": "0.5.3",
+    "globals": "17.7.0",
+    "prettier": "3.9.3",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.60.0",
-    "vitest": "4.1.7"
+    "typescript-eslint": "8.62.0",
+    "vitest": "4.1.9"
   }
 }
