@@ -318,3 +318,35 @@ export const rescheduler = internalMutation({
     );
   },
 });
+
+export const continueExecution = mutation({
+  args: {
+    id: v.id("crons"),
+    functionHandle: v.string(),
+    args: v.any(),
+  },
+  handler: async (ctx, { id, functionHandle, args }) => {
+    const cronJob = await ctx.db.get("crons", id);
+    if (!cronJob) {
+      throw Error(`Cron ${id} not found`);
+    }
+    if (!cronJob.executionJobId) {
+      throw Error(`Job not executing ${id}`);
+    }
+    const executionJob = await ctx.db.system.get(
+      "_scheduled_functions",
+      cronJob.executionJobId,
+    );
+    if (!executionJob || executionJob.state.kind !== "inProgress") {
+      throw Error(
+        `Execution job ${cronJob.executionJobId} expected to still be running`,
+      );
+    }
+    const executionJobId = await ctx.scheduler.runAfter(
+      0,
+      functionHandle as FunctionHandle<"mutation" | "action">,
+      args,
+    );
+    await ctx.db.patch("crons", id, { executionJobId });
+  },
+});
