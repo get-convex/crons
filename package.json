@@ -9,12 +9,12 @@
     "cron",
     "scheduler"
   ],
-  "homepage": "https://github.com/get-convex/crons#readme",
+  "homepage": "https://github.com/convex/crons#readme",
   "bugs": {
-    "url": "https://github.com/get-convex/crons/issues",
+    "url": "https://github.com/convex/crons/issues",
     "email": "support@convex.dev"
   },
-  "repository": "github:get-convex/crons",
+  "repository": "github:convex/crons",
   "license": "Apache-2.0",
   "type": "module",
   "files": [
